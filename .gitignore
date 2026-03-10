@@ -1,0 +1,8 @@
+*env/
+__pycache__/
+# data/
+outputs_exe/
+solution/
+rapport_tex/
+_*/
+resultats_csv/A3_e0_graphScript.ipynb

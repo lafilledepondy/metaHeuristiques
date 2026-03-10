@@ -1,0 +1,4 @@
+logFile;dataFileName;Algorithm;Number of classes;solutionValue;isFeasible;cpuTime
+centSommets_A2_P3_EPS0.0.log;centSommets;2;3;1160.0;True;171.25192427635193
+centSommets_A2_P3_EPS0.5.log;centSommets;2;3;894.0;True;240.61138701438904
+centSommets_A2_P3_EPS1.0.log;centSommets;2;3;775.0;True;310.0538787841797
