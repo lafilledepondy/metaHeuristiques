@@ -118,6 +118,8 @@ TODO
 
 Graph files should contain:
 
+
+
 - Header: `n m deg_min deg_max` (number of nodes, edges, min degree, max degree)
 - Edges: `u v [weight]` (1-based node indices, weight optional, default 1)
 - Footer: Degree information for each node -->
