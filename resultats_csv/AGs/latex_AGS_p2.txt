@@ -1,0 +1,21 @@
+\multirow{2}{*}{\textbf{Instance}} & \multirow{2}{*}{\textbf{p}} & \multicolumn{3}{c|}{\textbf{MinCut}} & \multicolumn{3}{c|}{\textbf{CPU (s)}} \\
+\cline{3-8}
+& & $\epsilon=0.0$ & $\epsilon=0.5$ & $\epsilon=1.0$ & $\epsilon=0.0$ & $\epsilon=0.5$ & $\epsilon=1.0$ \\
+\hline
+quatreSommets & 2 & 2 & 1 & 0 & $1.32e{-2}$ & $1.56e{-2}$ & $1.22e{-2}$ \\
+cinqSommets & 2 & 4 & 3 & 0 & $1.66e{-2}$ & $1.60e{-2}$ & $1.49e{-2}$ \\
+dixSommets & 2 & 13 & 8 & 0 & $2.56e{-2}$ & $2.53e{-2}$ & $2.35e{-2}$ \\
+quinzeSommets & 2 & 43 & 25 & 5 & $5.14e{-2}$ & $4.79e{-2}$ & $4.29e{-2}$ \\
+dixSeptSommets & 2 & 60 & 36 & 0 & $5.97e{-2}$ & $5.79e{-2}$ & $4.95e{-2}$ \\
+vingtSommets & 2 & 41 & 29 & 7 & $5.52e{-2}$ & $5.08e{-2}$ & $4.64e{-2}$ \\
+vingtEtunSommets & 2 & 107 & 77 & 0 & $9.52e{-2}$ & $8.62e{-2}$ & $7.62e{-2}$ \\
+vingtDeuxSommets & 2 & 105 & 74 & 0 & $9.62e{-2}$ & $9.04e{-2}$ & $7.89e{-2}$ \\
+vingtTroisSommets & 2 & 116 & 69 & 0 & $1.06e{-1}$ & $9.58e{-2}$ & $8.41e{-2}$ \\
+vingtQuatreSommets & 2 & 131 & 89 & 0 & $1.81e{-1}$ & $9.97e{-2}$ & $9.10e{-2}$ \\
+vingtCinqSommets & 2 & 152 & 110 & 0 & $1.98e{-1}$ & $1.22e{-1}$ & $1.03e{-1}$ \\
+trenteSommets & 2 & 193 & 135 & 0 & $1.84e{-1}$ & $1.51e{-1}$ & $1.39e{-1}$ \\
+cinquanteSommets & 2 & 209 & 160 & 82 & $2.61e{-1}$ & $1.98e{-1}$ & $1.93e{-1}$ \\
+centSommets & 2 & 945 & 701 & 468 & $8.60e{-1}$ & $7.31e{-1}$ & $6.99e{-1}$ \\
+cinqCentSommets & 2 & 3632 & 3492 & 3381 & $4.40e{0}$ & $3.23e{0}$ & $3.32e{0}$ \\
+milleSommets & 2 & 4854 & 4755 & 4716 & $6.66e{0}$ & $5.64e{0}$ & $4.78e{0}$ \\
+\hline

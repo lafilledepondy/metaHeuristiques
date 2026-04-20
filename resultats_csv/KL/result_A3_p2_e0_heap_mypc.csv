@@ -1,0 +1,17 @@
+logFile;dataFileName;Algorithm;Number of classes;solutionValue;isFeasible;cpuTime
+vingtCinqSommets_A3_P2_EPS0.0.log;vingtCinqSommets;3;2;152.0;True;0.002373933792114258
+vingtSommets_A3_P2_EPS0.0.log;vingtSommets;3;2;40.0;True;0.0017590522766113281
+milleSommets_A3_P2_EPS0.0.log;milleSommets;3;2;3442.0;True;40.7384729385376
+quinzeSommets_A3_P2_EPS0.0.log;quinzeSommets;3;2;44.0;True;0.0010209083557128906
+vingtEtunSommets_A3_P2_EPS0.0.log;vingtEtunSommets;3;2;107.0;True;0.0007128715515136719
+cinquanteSommets_A3_P2_EPS0.0.log;cinquanteSommets;3;2;200.0;True;0.01209402084350586
+centSommets_A3_P2_EPS0.0.log;centSommets;3;2;846.0;True;0.17140460014343262
+quatreSommets_A3_P2_EPS0.0.log;quatreSommets;3;2;2.0;True;0.00012254714965820312
+dixSommets_A3_P2_EPS0.0.log;dixSommets;3;2;13.0;True;0.0002200603485107422
+dixSeptSommets_A3_P2_EPS0.0.log;dixSeptSommets;3;2;60.0;True;0.0014476776123046875
+vingtQuatreSommets_A3_P2_EPS0.0.log;vingtQuatreSommets;3;2;131.0;True;0.0021190643310546875
+cinqSommets_A3_P2_EPS0.0.log;cinqSommets;3;2;4.0;True;7.081031799316406e-05
+trenteSommets_A3_P2_EPS0.0.log;trenteSommets;3;2;189.0;True;0.003469228744506836
+vingtDeuxSommets_A3_P2_EPS0.0.log;vingtDeuxSommets;3;2;103.0;True;0.0013592243194580078
+cinqCentSommets_A3_P2_EPS0.0.log;cinqCentSommets;3;2;2816.0;True;10.848490476608276
+vingtTroisSommets_A3_P2_EPS0.0.log;vingtTroisSommets;3;2;116.0;True;0.0024242401123046875

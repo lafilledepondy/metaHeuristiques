@@ -14,14 +14,16 @@ parser.add_argument("-d", "--dataFolderPath", type=valid_folder,
                     required=True, help="Path to folder with data instances")
 parser.add_argument("-f", "--experimentsFolderPath", type=str, 
                     required=True, help="Base path to store experiment outputs (folder will be created)")
-parser.add_argument("-a", "--AlgorithmList", nargs='*', type=int, choices=[1, 2, 3], 
-                    required=True, help="List of algorithms to run (1 or 2)")
+parser.add_argument("-a", "--AlgorithmList", nargs='*', type=float, choices=[1.0, 2.0, 3.1, 3.2, 4.0, 5.0, 6.0], 
+                    required=True, help="List of algorithms to run (1.0, 2.0, 3.1, 3.2, 4.0, 5.0 or 6.0)")
 parser.add_argument("-p", "--nbClassesList", nargs='*', type=positive_int, 
                     required=True, help="List of numbers of classes to test (p values)")
 parser.add_argument("-e", "--epsilonList", nargs='*', type=float, 
-                    required=True, help="List of epsilon values to test")
+                    required=True, help="List of epsilon values to test (i.e )")
 parser.add_argument("-t", "--timeLimit", type=positive_int, 
                     default=3600, help="Time limit per run in seconds (default 3600 seconds = 1 hour)")
+parser.add_argument("-k","--kParameter", type=int,
+                     default=3, help="k parameter for Gradient Heuristic (k-th improvement)")
 
 
 print("Start experiments for graph partitioning problem")
@@ -40,6 +42,7 @@ print("Algorithms:", args.AlgorithmList)
 print("Numbers of classes (p):", args.nbClassesList)
 print("Epsilon values:", args.epsilonList)
 print("Time limit:", args.timeLimit)
+print("nombre de k ameliorations pour Gradient Heuristic =", args.kParameter)
 print("------------------------------------")
 
 # Prepare experiments folder with timestamp
@@ -72,7 +75,7 @@ for dataFile in sorted(os.listdir(args.dataFolderPath)):
 
                 solver_script = os.path.join(os.path.dirname(__file__), 'solver.py')
                 cmd = [sys.executable, solver_script, f'-d={dataFilePath}', f'-a={algo}', f'-p={p}', f'-e={eps}',
-                    f'-t={args.timeLimit}', f'-f={solutionFolderPath}']
+                    f'-t={args.timeLimit}', f'-f={solutionFolderPath}', f'-k={args.kParameter}']
                 print('>', ' '.join(cmd))
 
                 try:

@@ -2,7 +2,6 @@
 __pycache__/
 # data/
 outputs_exe/
-solution/
-rapport_tex/
+# solution/
 _*/
-resultats_csv/A3_e0_graphScript.ipynb
+resultats_csv/AGs/hyperparam_search/

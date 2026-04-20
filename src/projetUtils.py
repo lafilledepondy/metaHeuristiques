@@ -20,7 +20,7 @@ def valid_folder(value):
         raise argparse.ArgumentTypeError(f"{value} does not exist or is not a directory (you should create it before)")
     return value
 
-def checkSolution(n, solution, p, epsilon):
+def checkSolution(n, solution, p, epsilon) -> bool:
     """Vérifie si une solution est réalisable pour `p` classes.
     - 2 <= p <= n
     - chaque sommet est affecté 
@@ -127,3 +127,119 @@ def recordSolution(solution, solutionFilePath, one_based_vertices=True):
         print(f"Error writing solution file: {e}")
         raise
 
+def _print_banner(title, subtitle=None, width=60):
+    border = "+" + "=" * (width - 2) + "+"
+    body_width = width - 4
+    print(border)
+    print(f"| {title.center(body_width)} |")
+    if subtitle:
+        print(f"| {subtitle.center(body_width)} |")
+    print(border)
+
+
+def _print_section(title, width=60):
+    print("\n" + title.upper().center(width, "-"))
+
+
+def prompt_yes_no(question, options_hint="yes/no"):
+    while True:
+        prompt = question
+        if "[" not in question or "]" not in question:
+            prompt = f"{question} [{options_hint}]"
+
+        raw = input(f"{prompt}\n>>> ").strip().lower()
+        if raw == "":
+            print("Please answer yes or no.")
+            continue
+        if raw in {"y", "yes", "o", "oui"}:
+            return True
+        if raw in {"n", "no", "non"}:
+            return False
+        print("Please answer yes or no.")
+
+
+def prompt_typed_value(question, caster=str, validator=None, default=None, allow_empty=False):
+    """type a value with a specific type"""
+    while True:
+        prompt = f"{question}"
+        if default is not None:
+            prompt += f" (default: {default})"
+        prompt += "\n>>> "
+
+        raw = input(prompt).strip()
+
+        if raw == "":
+            if default is not None:
+                return default
+            if allow_empty:
+                return ""
+            print("Value required.")
+            continue
+
+        try:
+            value = caster(raw)
+            if validator is not None:
+                value = validator(value)
+            return value
+        except Exception as exc:
+            print(f"Invalid value: {exc}")
+
+
+def prompt_choice(question, choices, default=None):
+    """yes or no ; or a value in a set of choices"""
+    allowed = set(choices)
+    while True:
+        prompt = f"{question}"
+        if default is not None:
+            prompt += f" (default: {default})"
+        prompt += "\n>>> "
+
+        raw = input(prompt).strip()
+        if raw == "" and default is not None:
+            return default
+
+        try:
+            value = float(raw)
+        except ValueError:
+            print("Invalid choice format.")
+            continue
+
+        if value in allowed:
+            return value
+        print(f"Invalid choice. Allowed values: {sorted(choices)}")
+
+from gui import main as gui_main
+
+import sys
+
+def pseudo_main():
+    """
+        * if no arguments are provided, ask whether to launch GUI
+        * else call solver.py with the given arguments
+    """
+    if len(sys.argv) == 1:
+        use_gui = prompt_yes_no("Gui ?")
+        if use_gui:
+            single_algo_gui = prompt_yes_no(
+                "Run 1 algo or multi-algo Gui ? [yes=1 algo, no=multi-algo]"
+            )
+
+            if single_algo_gui:
+                gui_main()
+                return
+            else:
+                from gui_comparison import main as gui_comparison_main
+                gui_comparison_main()
+                return 
+    
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    solver_path = os.path.join(script_dir, "solver.py")
+
+    cmd = [sys.executable, solver_path] + sys.argv[1:]
+
+    env = os.environ.copy()
+    # if user already answered in main.py then avoid asking the same GUI question in solver.py
+    if len(sys.argv) == 1:
+        env["META_SKIP_SOLVER_GUI_PROMPT"] = "1"
+
+    os.execve(sys.executable, cmd, env)

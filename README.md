@@ -26,13 +26,13 @@ This project implements optimization algorithms to solve the graph partitioning 
 
 ### Requirements
 
-- Python 3.1+
+- Python 3.10+
 
 ### Setup
 
 ```bash
 # Clone the repository
-git clone https://gitlab.emi.u-bordeaux.fr/meta/meta.git
+git clone https://github.com/lafilledepondy/metaHeuristiques.git
 cd meta
 
 # Create virtual environment
@@ -48,54 +48,95 @@ pip install -r requirements.txt
 
 ### Running the `main.py`
 
-The solver can be run in two modes:
+`main.py` now starts with a launcher question:
 
-#### 1. GUI Mode (No Parameters)
+```text
+Gui ? [yes/no]
+>>>
+```
 
-Launch the graphical interface to select parameters interactively:
+- If you answer `yes`, you are prompted to choose between the single-algorithm GUI and the multi-algorithm comparison GUI.
+- If you answer `no`, the solver switches to interactive terminal prompts.
+- If you pass CLI flags directly, they are used without the interactive questionnaire.
+
+#### GUI Preview
+
+<p align="center">
+  <img src="assets/gui_one_algo_run.png" alt="Single-algorithm GUI" width="900">
+</p>
+
+<p align="center">
+  <img src="assets/gui_multi_algo_run.png" alt="Multi-algorithm comparison GUI" width="900">
+</p>
+
+#### 1. Launcher + Interactive Mode (No Parameters)
+
+Run from `src/`:
 
 ```bash
 cd src
-python main.py
+python3 main.py
+```
+
+If you choose `no` for GUI, the prompts are:
+
+```text
+dataFilePath
+Algo
+1.0 enum, 2.0 gradient, 3.1 KL (slow), 3.2 KL (fast), 4.0 Gradient+Heuristic, 5.0 RecuitSimule, 6.0 SimpleGeneticAlgo
+nbClasses (skipped for KL)
+epsilon (skipped for KL)
+timeLimit (default: 3600)
+nbRuns (only for gradient)
 ```
 
 #### 2. Command-Line Mode (With Parameters)
 
 ```bash
 cd src
-python main.py -d <data_file> -a <algorithm> -p <num_classes> [options]
+python3 main.py -d <data_file> -a <algorithm> -p <num_classes> [options]
 ```
 
-**Required Arguments:**
+**Required in CLI mode:**
 
 - `-d, --dataFilePath` - Path to the graph data file
-- `-a, --algorithm` - Algorithm choice: 1 (Enumeration), 2 (Gradient Descent), 3 (Kernighan-Lin)
-- `-p, --nbClasses` - Number of partition classes
-- `-nb, --nbRuns <nb_max_iter>` - When using the Gradient solver (`-a 2`), set the number of multi-start. This `nb_max_iter` value determines how many local searches are performed before picking the best solution.
+- `-a, --algorithm` - Algorithm choice: `1.0` (Enumeration), `2.0` (Gradient Descent), `3.1` (Kernighan-Lin enum), `3.2` (Kernighan-Lin heapq)
+- `-p, --nbClasses` - Required for `1.0` and `2.0`; ignored/forced to `2` for `3.1` and `3.2`
 
 **Optional Arguments:**
 
 - `-f, --solutionFolderPath` - Output folder for solution files (default: creates 'outputs_exe' folder if not provided)
-- `-e, --epsilon` - Balance tolerance factor (default: 0.1)
+- `-e, --epsilon` - Balance tolerance factor (default: `0.1`; forced to `0.0` for KL variants)
 - `-t, --timeLimit` - Time limit in seconds (default: 3600 seconds = 1 hour)
-- `-nb, --nbRuns` - Specific to Gradient solver ; default is 20 (number) of multi-start iterations.
+- `-nb, --nbRuns` - Specific to Gradient solver (`-a 2.0`); default is 20 multi-start iterations.
+
+**Notes:**
+
+- Kernighan-Lin variants (`-a 3.1` and `-a 3.2`) support only `-p 2`.
+- If `-f` is omitted, solutions are written to `outputs_exe/`.
 
 #### Example
 
 ```bash
-python main.py -d ../data/graph.txt -a 1 -p 4 -e 0.1 -t 3600
+python3 main.py -d ../data/graph.txt -a 1.0 -p 4 -e 0.1 -t 3600
 ```
 
 Or with custom output folder:
 
 ```bash
-python main.py -d ../data/graph.txt -a 1 -p 4 -f ./results -e 0.1 -t 3600
+python3 main.py -d ../data/graph.txt -a 3.2 -p 2 -f ./results -e 0.0 -t 3600
 ```
 
 #### Running Batch Experiments
 
 ```bash
-python ScriptExperiments.py -d <data_folder> -f <experiment_folder> -a <algo_list> -p <class_list> -e <epsilon_list> -t <time_limit>
+python3 ScriptExperiments.py -d <data_folder> -f <experiment_folder> -a <algo_list> -p <class_list> -e <epsilon_list> -t <time_limit>
+```
+
+Example:
+
+```bash
+python3 ScriptExperiments.py -d ../data -f ../runs/exp -a 1.0 -p 2 4 -e 0.0 0.1 -t 120
 ```
 
 #### Built-in Examples
@@ -104,12 +145,16 @@ python ScriptExperiments.py -d <data_folder> -f <experiment_folder> -a <algo_lis
 
 - `enum_example()` runs the brute-force enumeration on `data/cinqSommets.txt`.
 - `gradient_descent_example()` showcases the greedy gradient routine (set `nb_iter` to match your desired `nb_max_iter`).
-- `kl_example()` executes a Kernighan-Lin pass for the 2-class case.
+- `kl_enum_example()` executes Kernighan-Lin with the enum pair-selection variant (`3.1`).
+- `kl_example()` executes Kernighan-Lin with the heapq pair-selection variant (`3.2`).
+- `gradient_heuristic_example()` runs the combined Gradient + Heuristic approach (`4.0`).
+- `recuit_simule_example()` runs the Simulated Annealing approach (`5.0`).
+- `simple_genetic_algo_example()` runs the Simple Genetic Algorithm (`6.0`).
 
 #### Generating Result Summary
 
 ```bash
-python scriptCreateSummaryFiles.py -l <log_folder>
+python3 scriptCreateSummaryFiles.py -l <log_folder>
 ```
 
 <!-- ## Data Format
@@ -118,8 +163,6 @@ TODO
 
 Graph files should contain:
 
-
-
 - Header: `n m deg_min deg_max` (number of nodes, edges, min degree, max degree)
 - Edges: `u v [weight]` (1-based node indices, weight optional, default 1)
 - Footer: Degree information for each node -->
@@ -127,3 +170,7 @@ Graph files should contain:
 ## Acknowledgment
 
 Inspired by the ROAD 2026 optimization project framework by Professor Thibault PRUNET.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

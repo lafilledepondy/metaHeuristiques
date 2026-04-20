@@ -1,0 +1,20 @@
+\multirow{2}{*}{\textbf{Instance}} & \multirow{2}{*}{\textbf{p}} & \multicolumn{3}{c|}{\textbf{MinCut}} & \multicolumn{3}{c|}{\textbf{CPU (s)}} \\
+\cline{3-8}
+& & $\epsilon=0.0$ & $\epsilon=0.5$ & $\epsilon=1.0$ & $\epsilon=0.0$ & $\epsilon=0.5$ & $\epsilon=1.0$ \\
+\hline
+dixSommets & 6 & 25 & 22 & 18 & $3.89e{-2}$ & $2.67e{-2}$ & $2.51e{-2}$ \\
+quinzeSommets & 6 & 76 & 72 & 65 & $5.60e{-2}$ & $5.43e{-2}$ & $5.12e{-2}$ \\
+dixSeptSommets & 6 & 102 & 88 & 85 & $7.67e{-2}$ & $6.37e{-2}$ & $6.14e{-2}$ \\
+vingtSommets & 6 & 76 & 70 & 60 & $7.45e{-2}$ & $5.65e{-2}$ & $5.19e{-2}$ \\
+vingtEtunSommets & 6 & 177 & 159 & 144 & $1.17e{-1}$ & $1.49e{-1}$ & $1.30e{-1}$ \\
+vingtDeuxSommets & 6 & 182 & 165 & 142 & $1.45e{-1}$ & $9.84e{-2}$ & $9.63e{-2}$ \\
+vingtTroisSommets & 6 & 196 & 177 & 162 & $1.65e{-1}$ & $1.18e{-1}$ & $1.02e{-1}$ \\
+vingtQuatreSommets & 6 & 219 & 198 & 182 & $1.39e{-1}$ & $1.18e{-1}$ & $1.56e{-1}$ \\
+vingtCinqSommets & 6 & 246 & 227 & 214 & $1.77e{-1}$ & $1.32e{-1}$ & $1.28e{-1}$ \\
+trenteSommets & 6 & 335 & 296 & 277 & $1.98e{-1}$ & $1.74e{-1}$ & $2.63e{-1}$ \\
+cinquanteSommets & 6 & 400 & 363 & 356 & $2.48e{-1}$ & $2.14e{-1}$ & $2.13e{-1}$ \\
+centSommets & 6 & 1626 & 1539 & 1451 & $9.69e{-1}$ & $8.06e{-1}$ & $9.09e{-1}$ \\
+cinqCentSommets & 6 & 6124 & 6032 & 6030 & $4.34e{0}$ & $3.52e{0}$ & $3.69e{0}$ \\
+milleSommets & 6 & 8181 & 8075 & 8115 & $8.23e{0}$ & $5.09e{0}$ & $5.00e{0}$ \\
+missing & 6 & -- & -- & -- & $--$ & $--$ & $--$ \\
+\hline

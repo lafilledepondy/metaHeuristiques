@@ -1,0 +1,17 @@
+logFile;dataFileName;Algorithm;Number of classes;solutionValue;isFeasible;cpuTime
+dixSommets_A3.2_P2_EPS0.0.log;dixSommets;3.2;2;13.0;True;0.00025010108947753906
+cinqCentSommets_A3.2_P2_EPS0.0.log;cinqCentSommets;3.2;2;2816.0;True;8.099042892456055
+vingtQuatreSommets_A3.2_P2_EPS0.0.log;vingtQuatreSommets;3.2;2;131.0;True;0.0020737648010253906
+vingtCinqSommets_A3.2_P2_EPS0.0.log;vingtCinqSommets;3.2;2;152.0;True;0.002083301544189453
+dixSeptSommets_A3.2_P2_EPS0.0.log;dixSeptSommets;3.2;2;60.0;True;0.0007569789886474609
+quatreSommets_A3.2_P2_EPS0.0.log;quatreSommets;3.2;2;2.0;True;7.843971252441406e-05
+vingtTroisSommets_A3.2_P2_EPS0.0.log;vingtTroisSommets;3.2;2;116.0;True;0.002549886703491211
+centSommets_A3.2_P2_EPS0.0.log;centSommets;3.2;2;846.0;True;0.17746305465698242
+vingtSommets_A3.2_P2_EPS0.0.log;vingtSommets;3.2;2;40.0;True;0.0010237693786621094
+vingtDeuxSommets_A3.2_P2_EPS0.0.log;vingtDeuxSommets;3.2;2;103.0;True;0.0014221668243408203
+cinquanteSommets_A3.2_P2_EPS0.0.log;cinquanteSommets;3.2;2;200.0;True;0.010696172714233398
+cinqSommets_A3.2_P2_EPS0.0.log;cinqSommets;3.2;2;4.0;True;8.654594421386719e-05
+trenteSommets_A3.2_P2_EPS0.0.log;trenteSommets;3.2;2;189.0;True;0.003410816192626953
+milleSommets_A3.2_P2_EPS0.0.log;milleSommets;3.2;2;3442.0;True;25.75845742225647
+vingtEtunSommets_A3.2_P2_EPS0.0.log;vingtEtunSommets;3.2;2;107.0;True;0.0006172657012939453
+quinzeSommets_A3.2_P2_EPS0.0.log;quinzeSommets;3.2;2;44.0;True;0.00045371055603027344

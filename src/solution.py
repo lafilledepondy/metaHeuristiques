@@ -2,6 +2,9 @@
 # Inspiré par le code du projet d’optimisation ROAD 2026 du proffesseur PRUNET Thibault
 
 from array import array
+import random
+from projetUtils import checkSolution
+import math
 
 
 class PartitionSolution:
@@ -11,11 +14,16 @@ class PartitionSolution:
         self.graph = graph
         self.p = p                                              # nb de classe
         self.classe = array('b', [-1] * self.graph.nbNodes())   # partition
-        self.objective_value = None                             # valeur du cut
+        self.objective_value = None    
+        self.class_sizes = array('i', [0] * p)                         # valeur du cut
 
     def set_class(self, node, k):
         """Affecte un sommet à une classe."""
+        old = self.classe[node]
+        if old >= 0:
+            self.class_sizes[old] -= 1   
         self.classe[node] = k
+        self.class_sizes[k] += 1         
 
     def classes(self):
         """Retourne un dictionnaire {classe: [sommets]}."""
@@ -114,27 +122,31 @@ def printSolution(solution):
 
     print(banner + "\n")
 
+def compute_delta(X, adj, node, old_class, new_class): 
+        delta = 0.0
+        for neighbor, weight in adj[node]:
+            c = X.classe[neighbor]
+            if c < 0:
+                continue
+            if c == old_class:
+                delta += weight # Perte d'une arête intra-classe
+            if c == new_class:
+                delta -= weight  # Gain d'une arête intra-classe
+        return delta
 
-def move_node(solution, node, new_class):
+def move_node(solution, adj, node, new_class):
     """Déplace un sommet vers une nouvelle classe et met à jour l'objectif."""
     old_class = solution.classe[node]
     if old_class == new_class:
         return  # Pas de changement
-
-    adj = solution.graph.adjacency()
-    delta = 0.0
-
-    for neighbor, weight in adj[node]:
-        neighbor_class = solution.classe[neighbor]
-        if neighbor_class < 0:
-            continue
-        if neighbor_class == old_class:
-            delta += weight  # Perte d'une arête intra-classe
-        if neighbor_class == new_class:
-            delta -= weight  # Gain d'une arête intra-classe
+    delta = compute_delta(solution, adj, node, old_class, new_class)
 
     # Mettre à jour la classe du sommet
     solution.classe[node] = new_class
+
+    #Mettre à jour les tailles de classes
+    solution.class_sizes[old_class] -= 1 
+    solution.class_sizes[new_class] += 1 
 
     # Mettre à jour la valeur de l'objectif
     if solution.objective_value is not None:
@@ -180,4 +192,24 @@ def swap_nodes(solution, node1, node2):
         solution.objective_value += delta
 
 
+def random_neighbor(X: PartitionSolution, adj, p: int, eps: float):
+    """Returns a random feasible neighbor of X.
+       If no feasible neighbor is found, returns None."""
+    n = X.graph.nbNodes()
+    max_size = math.ceil((n / p) * (1 + eps))  # Upper bound
+
+    for _ in range(20):
+        node = random.randint(0, n - 1)
+        old_class = X.classe[node]
+        new_class = random.choice([k for k in range(p) if k != old_class]) # chose a new class
+        
+        new_size_old = X.class_sizes[old_class] - 1
+        new_size_new = X.class_sizes[new_class] + 1
+        
+        if new_size_new > max_size:
+            continue
+        delta = compute_delta(X, adj, node, old_class, new_class)
+        return node, new_class, delta
+
+    return None
 

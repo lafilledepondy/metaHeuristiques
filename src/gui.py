@@ -13,23 +13,27 @@ import threading
 import subprocess
 
 # ====== DESCRIPTIONS ======
-ALGO1_DESCRIPTION = "Exhaustive search through all possible partitions\n(Best for small graphs)"
-ALGO2_DESCRIPTION = "Iterative optimization using gradient information\n(TODO)"
-ALGO3_DESCRIPTION = "Advanced heuristic with vertex swapping\n(TODO)"
+ALGO1_DESCRIPTION = "Exhaustive search through all possible partitions"
+ALGO2_DESCRIPTION = "Iterative optimization using gradient information"
+ALGO3_DESCRIPTION = "Kernighan-Lin using enum best-pair search"
+ALGO4_DESCRIPTION = "Kernighan-Lin using heapq best-pair search"
+ALGO5_DESCRIPTION = "Gradient descent combined with heuristic strategies"
+ALGO6_DESCRIPTION = "Simulated annealing for global optimization"
+ALGO7_DESCRIPTION = "Simple genetic algorithm for evolutionary search"
 
 class ParametersGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Graph Partitioning - Parameters")
-        self.root.geometry("600x950")
+        self.root.geometry("1000x850")
         self.root.resizable(False, False)
         
         # ====== CENTER ON THE SCREEN ======
         self.root.update_idletasks()
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
-        window_width = 600
-        window_height = 950
+        window_width = 1000
+        window_height = 850
         x = (screen_width - window_width) // 2
         y = (screen_height - window_height) // 2
         self.root.geometry(f"{window_width}x{window_height}+{x}+{y}")
@@ -78,41 +82,96 @@ class ParametersGUI:
         
         self.algo_var = tk.StringVar(value="1")
         
-        algo_frame = ttk.LabelFrame(main_frame, text="Select Algorithm", padding=15)
+        algo_frame = ttk.LabelFrame(main_frame, text="Select Algorithm", padding=10)
         algo_frame.grid(row=row, column=0, columnspan=3, sticky=(tk.W, tk.E), padx=self.pad, pady=10)
         
+        # Configure grid columns for equal width alignment
+        for col in range(4):
+            algo_frame.columnconfigure(col, weight=1)
+        
+        # Algo 1 - Enumeration
         algo1_frame = tk.Frame(algo_frame, bg=self.card_color)
-        algo1_frame.pack(fill=tk.X, pady=8, padx=5)
+        algo1_frame.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=4, padx=2)
         algo1_btn = tk.Button(algo1_frame, text="◇ Enumeration", bg=self.card_color, fg=self.text_color,
                              activebackground=self.card_color, activeforeground=self.text_color,
-                             bd=0, font=('Segoe UI', 10, 'bold'), anchor=tk.W, justify=tk.LEFT,
-                             command=lambda: self.select_algorithm("1", algo1_btn, algo2_btn, algo3_btn))
-        algo1_btn.pack(anchor=tk.W, padx=15, pady=8)
+                             bd=0, font=('Segoe UI', 9, 'bold'), anchor=tk.W, justify=tk.LEFT, width=25,
+                     command=lambda: self.select_algorithm("1", algo1_btn, algo2_btn, algo3_btn, algo4_btn, algo5_btn, algo6_btn, algo7_btn))
+        algo1_btn.pack(anchor=tk.W, padx=10, pady=4)
         self.algo1_btn = algo1_btn
         ttk.Label(algo1_frame, text=ALGO1_DESCRIPTION,
-                 font=('Segoe UI', 10), foreground=self.muted_text).pack(anchor=tk.W, padx=40, pady=(0, 8))
+                 font=('Segoe UI', 8), foreground=self.muted_text, wraplength=160).pack(anchor=tk.W, padx=15, pady=(0, 4))
         
+        # Algo 2 - Gradient Descent
         algo2_frame = tk.Frame(algo_frame, bg=self.card_color)
-        algo2_frame.pack(fill=tk.X, pady=8, padx=5)
+        algo2_frame.grid(row=0, column=1, sticky=(tk.W, tk.E), pady=4, padx=2)
         algo2_btn = tk.Button(algo2_frame, text="◇ Gradient Descent", bg=self.card_color, fg=self.text_color,
                              activebackground=self.card_color, activeforeground=self.text_color,
-                             bd=0, font=('Segoe UI', 10, 'bold'), anchor=tk.W, justify=tk.LEFT,
-                             command=lambda: self.select_algorithm("2", algo1_btn, algo2_btn, algo3_btn))
-        algo2_btn.pack(anchor=tk.W, padx=15, pady=8)
+                             bd=0, font=('Segoe UI', 9, 'bold'), anchor=tk.W, justify=tk.LEFT, width=25,
+                             command=lambda: self.select_algorithm("2", algo1_btn, algo2_btn, algo3_btn, algo4_btn, algo5_btn, algo6_btn, algo7_btn))
+        algo2_btn.pack(anchor=tk.W, padx=10, pady=4)
         self.algo2_btn = algo2_btn
         ttk.Label(algo2_frame, text=ALGO2_DESCRIPTION,
-                 font=('Segoe UI', 10), foreground=self.muted_text).pack(anchor=tk.W, padx=40, pady=(0, 8))
+                 font=('Segoe UI', 8), foreground=self.muted_text, wraplength=160).pack(anchor=tk.W, padx=15, pady=(0, 4))
         
+        # Algo 3 - KL enum
         algo3_frame = tk.Frame(algo_frame, bg=self.card_color)
-        algo3_frame.pack(fill=tk.X, pady=8, padx=5)
-        algo3_btn = tk.Button(algo3_frame, text="◇ Kernighan and Lin", bg=self.card_color, fg=self.text_color,
-                             activebackground=self.card_color, activeforeground=self.text_color,
-                             bd=0, font=('Segoe UI', 10, 'bold'), anchor=tk.W, justify=tk.LEFT,
-                             command=lambda: self.select_algorithm("3", algo1_btn, algo2_btn, algo3_btn))
-        algo3_btn.pack(anchor=tk.W, padx=15, pady=8)
+        algo3_frame.grid(row=0, column=2, sticky=(tk.W, tk.E), pady=4, padx=2)
+        algo3_btn = tk.Button(algo3_frame, text="◇ KL (enum)", bg=self.card_color, fg=self.text_color,
+                     activebackground=self.card_color, activeforeground=self.text_color,
+                     bd=0, font=('Segoe UI', 9, 'bold'), anchor=tk.W, justify=tk.LEFT, width=15,
+                     command=lambda: self.select_algorithm("3.1", algo1_btn, algo2_btn, algo3_btn, algo4_btn, algo5_btn, algo6_btn, algo7_btn))
+        algo3_btn.pack(anchor=tk.W, padx=10, pady=4)
         self.algo3_btn = algo3_btn
         ttk.Label(algo3_frame, text=ALGO3_DESCRIPTION,
-                 font=('Segoe UI', 10), foreground=self.muted_text).pack(anchor=tk.W, padx=40, pady=(0, 8))
+             font=('Segoe UI', 8), foreground=self.muted_text, wraplength=140, justify=tk.LEFT).pack(anchor=tk.W, padx=10, pady=(0, 4))
+        
+        # Algo 4 - KL heapq
+        algo4_frame = tk.Frame(algo_frame, bg=self.card_color)
+        algo4_frame.grid(row=0, column=3, sticky=(tk.W, tk.E), pady=4, padx=2)
+        algo4_btn = tk.Button(algo4_frame, text="◇ KL (heapq)", bg=self.card_color, fg=self.text_color,
+                     activebackground=self.card_color, activeforeground=self.text_color,
+                     bd=0, font=('Segoe UI', 9, 'bold'), anchor=tk.W, justify=tk.LEFT, width=15,
+                     command=lambda: self.select_algorithm("3.2", algo1_btn, algo2_btn, algo3_btn, algo4_btn, algo5_btn, algo6_btn, algo7_btn))
+        algo4_btn.pack(anchor=tk.W, padx=10, pady=4)
+        self.algo4_btn = algo4_btn
+        ttk.Label(algo4_frame, text=ALGO4_DESCRIPTION,
+             font=('Segoe UI', 8), foreground=self.muted_text, wraplength=140, justify=tk.LEFT).pack(anchor=tk.W, padx=10, pady=(0, 4))
+        
+        # Algo 5 - Gradient and Heuristic
+        algo5_frame = tk.Frame(algo_frame, bg=self.card_color)
+        algo5_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=4, padx=2)
+        algo5_btn = tk.Button(algo5_frame, text="◇ Gradient+Heuristic", bg=self.card_color, fg=self.text_color,
+                             activebackground=self.card_color, activeforeground=self.text_color,
+                             bd=0, font=('Segoe UI', 9, 'bold'), anchor=tk.W, justify=tk.LEFT, width=25,
+                     command=lambda: self.select_algorithm("4", algo1_btn, algo2_btn, algo3_btn, algo4_btn, algo5_btn, algo6_btn, algo7_btn))
+        algo5_btn.pack(anchor=tk.W, padx=10, pady=4)
+        self.algo5_btn = algo5_btn
+        ttk.Label(algo5_frame, text=ALGO5_DESCRIPTION,
+                 font=('Segoe UI', 8), foreground=self.muted_text, wraplength=160).pack(anchor=tk.W, padx=15, pady=(0, 4))
+        
+        # Algo 6 - Recuit Simule
+        algo6_frame = tk.Frame(algo_frame, bg=self.card_color)
+        algo6_frame.grid(row=1, column=1, sticky=(tk.W, tk.E), pady=4, padx=2)
+        algo6_btn = tk.Button(algo6_frame, text="◇ Recuit Simule", bg=self.card_color, fg=self.text_color,
+                             activebackground=self.card_color, activeforeground=self.text_color,
+                             bd=0, font=('Segoe UI', 9, 'bold'), anchor=tk.W, justify=tk.LEFT, width=25,
+                     command=lambda: self.select_algorithm("5", algo1_btn, algo2_btn, algo3_btn, algo4_btn, algo5_btn, algo6_btn, algo7_btn))
+        algo6_btn.pack(anchor=tk.W, padx=10, pady=4)
+        self.algo6_btn = algo6_btn
+        ttk.Label(algo6_frame, text=ALGO6_DESCRIPTION,
+                 font=('Segoe UI', 8), foreground=self.muted_text, wraplength=160).pack(anchor=tk.W, padx=15, pady=(0, 4))
+        
+        # Algo 7 - SimpleGeneticAlgo
+        algo7_frame = tk.Frame(algo_frame, bg=self.card_color)
+        algo7_frame.grid(row=1, column=2, columnspan=2, sticky=(tk.W, tk.E), pady=4, padx=2)
+        algo7_btn = tk.Button(algo7_frame, text="◇ Simple Genetic Algo", bg=self.card_color, fg=self.text_color,
+                             activebackground=self.card_color, activeforeground=self.text_color,
+                             bd=0, font=('Segoe UI', 9, 'bold'), anchor=tk.W, justify=tk.LEFT, width=25,
+                     command=lambda: self.select_algorithm("6", algo1_btn, algo2_btn, algo3_btn, algo4_btn, algo5_btn, algo6_btn, algo7_btn))
+        algo7_btn.pack(anchor=tk.W, padx=10, pady=4)
+        self.algo7_btn = algo7_btn
+        ttk.Label(algo7_frame, text=ALGO7_DESCRIPTION,
+                 font=('Segoe UI', 8), foreground=self.muted_text, wraplength=160).pack(anchor=tk.W, padx=15, pady=(0, 4))
         
         algo1_btn.config(text="◆ Enumeration")
         
@@ -154,13 +213,29 @@ class ParametersGUI:
                  foreground='gray').grid(row=row, column=2, sticky=tk.W, padx=5)
         row += 1
         
-        ttk.Label(main_frame, text="Number of Runs", font=('Segoe UI', 10)).grid(
+        ttk.Label(main_frame, text="Number of Runs (Gradient)", font=('Segoe UI', 10)).grid(
             row=row, column=0, sticky=tk.W, pady=5)
         self.nb_runs_var = tk.StringVar(value="20")
         self.nb_runs_spinbox = ttk.Spinbox(main_frame, from_=1, to=1000, 
                                          textvariable=self.nb_runs_var, width=10, state='disabled')
         self.nb_runs_spinbox.grid(row=row, column=1, sticky=tk.W, padx=(self.pad, 0))
         ttk.Label(main_frame, text="(default: 20, for Gradient only)", font=('Segoe UI', 9, 'italic'), 
+                 foreground='gray').grid(row=row, column=2, sticky=tk.W, padx=5)
+        row += 1
+
+        ttk.Label(main_frame, text="Number of Best Solution Runs (Gradient+Heuristic)", font=('Segoe UI', 10)).grid(
+            row=row, column=0, sticky=tk.W, pady=5)
+        self.nb_run_best_solution_var = tk.StringVar(value="3")
+        self.nb_run_best_solution_spinbox = ttk.Spinbox(
+            main_frame,
+            from_=1,
+            to=1000,
+            textvariable=self.nb_run_best_solution_var,
+            width=10,
+            state='disabled',
+        )
+        self.nb_run_best_solution_spinbox.grid(row=row, column=1, sticky=tk.W, padx=(self.pad, 0))
+        ttk.Label(main_frame, text="(default: 3, for Gradient+Heuristic only)", font=('Segoe UI', 9, 'italic'),
                  foreground='gray').grid(row=row, column=2, sticky=tk.W, padx=5)
         row += 1
         
@@ -218,30 +293,57 @@ class ParametersGUI:
         if folder:
             self.solution_folder_var.set(folder)
     
-    def select_algorithm(self, algo_num, btn1, btn2, btn3):
+    def select_algorithm(self, algo_num, btn1, btn2, btn3, btn4, btn5, btn6, btn7):
         """Handle algorithm selection with diamond indicators"""
         self.algo_var.set(algo_num)
+        
+        # Reset all buttons to empty diamond
+        btn1.config(text="◇ Enumeration")
+        btn2.config(text="◇ Gradient Descent")
+        btn3.config(text="◇ KL (enum)")
+        btn4.config(text="◇ KL (heapq)")
+        btn5.config(text="◇ Gradient+Heuristic")
+        btn6.config(text="◇ Recuit Simule")
+        btn7.config(text="◇ Simple Genetic Algo")
         
         # Update button 
         if algo_num == "1":
             btn1.config(text="◆ Enumeration")
-            btn2.config(text="◇ Gradient Descent")
-            btn3.config(text="◇ Kernighan and Lin")
             self.nb_classes_spinbox.config(state='normal')
             self.nb_runs_spinbox.config(state='disabled')
+            self.nb_run_best_solution_spinbox.config(state='disabled')
         elif algo_num == "2":
-            btn1.config(text="◇ Enumeration")
             btn2.config(text="◆ Gradient Descent")
-            btn3.config(text="◇ Kernighan and Lin")
             self.nb_classes_spinbox.config(state='normal')
             self.nb_runs_spinbox.config(state='normal')
-        elif algo_num == "3":
-            btn1.config(text="◇ Enumeration")
-            btn2.config(text="◇ Gradient Descent")
-            btn3.config(text="◆ Kernighan and Lin")
+            self.nb_run_best_solution_spinbox.config(state='disabled')
+        elif algo_num == "3.1":
+            btn3.config(text="◆ KL (enum)")
             self.nb_classes_var.set("2")
             self.nb_classes_spinbox.config(state='disabled')
             self.nb_runs_spinbox.config(state='disabled')
+            self.nb_run_best_solution_spinbox.config(state='disabled')
+        elif algo_num == "3.2":
+            btn4.config(text="◆ KL (heapq)")
+            self.nb_classes_var.set("2")
+            self.nb_classes_spinbox.config(state='disabled')
+            self.nb_runs_spinbox.config(state='disabled')
+            self.nb_run_best_solution_spinbox.config(state='disabled')
+        elif algo_num == "4":
+            btn5.config(text="◆ Gradient+Heuristic")
+            self.nb_classes_spinbox.config(state='normal')
+            self.nb_runs_spinbox.config(state='disabled')
+            self.nb_run_best_solution_spinbox.config(state='normal')
+        elif algo_num == "5":
+            btn6.config(text="◆ Recuit Simule")
+            self.nb_classes_spinbox.config(state='normal')
+            self.nb_runs_spinbox.config(state='disabled')
+            self.nb_run_best_solution_spinbox.config(state='disabled')
+        elif algo_num == "6":
+            btn7.config(text="◆ Simple Genetic Algo")
+            self.nb_classes_spinbox.config(state='normal')
+            self.nb_runs_spinbox.config(state='disabled')
+            self.nb_run_best_solution_spinbox.config(state='disabled')
         
         self.on_algo_changed()
     
@@ -252,7 +354,11 @@ class ParametersGUI:
         algo_names = {
             "1": "Enumeration",
             "2": "Gradient Descent",
-            "3": "Kernighan and Lin"
+            "3.1": "KL (enum)",
+            "3.2": "KL (heapq)",
+            "4": "Gradient+Heuristic",
+            "5": "Recuit Simule",
+            "6": "Simple Genetic Algo"
         }
         return algo_names.get(algo_num, "Unknown")
     
@@ -303,6 +409,14 @@ class ParametersGUI:
                     errors.append("Number of Runs must be positive")
             except ValueError:
                 errors.append("Number of Runs must be an integer")
+
+        if self.nb_run_best_solution_var.get().strip():
+            try:
+                nb_runs_best_solution = int(self.nb_run_best_solution_var.get())
+                if nb_runs_best_solution <= 0:
+                    errors.append("Number of Best Solution Runs (Gradient+Heuristic) must be positive")
+            except ValueError:
+                errors.append("Number of Best Solution Runs (Gradient+Heuristic) must be an integer")
         
         return errors
     
@@ -328,7 +442,8 @@ class ParametersGUI:
             Number of Classes: {self.nb_classes_var.get()}
             Epsilon: {self.epsilon_var.get() if self.epsilon_var.get().strip() else '0.1 (default)'}
             Time Limit: {self.time_limit_var.get() if self.time_limit_var.get().strip() else '3600 (default)'} seconds
-            Number of Runs: {self.nb_runs_var.get() if self.nb_runs_var.get().strip() else '20 (default)'} (for Gradient only)
+            Number of Runs (Gradient): {self.nb_runs_var.get() if self.nb_runs_var.get().strip() else '20 (default)'}
+            Number of Runs (Gradient+Heuristic): {self.nb_run_best_solution_var.get() if self.nb_run_best_solution_var.get().strip() else '3 (default)'}
             Solution Folder: {folder_display}
             ====================
         """
@@ -346,11 +461,16 @@ class ParametersGUI:
         try:            
             # Get parameters
             dataFilePath = self.data_file_var.get()
-            algorithm = int(self.algo_var.get())
+            # Map GUI button values to solver's accepted algorithm choices.
+            algorithm_map = {"1": 1.0, "2": 2.0, "3": 3.1, "3.1": 3.1, "3.2": 3.2}
+            algorithm = algorithm_map.get(self.algo_var.get(), float(self.algo_var.get()))
             nbClasses = int(self.nb_classes_var.get())
             epsilon = float(self.epsilon_var.get()) if self.epsilon_var.get().strip() else 0.1
             timeLimit = int(self.time_limit_var.get()) if self.time_limit_var.get().strip() else 3600
-            nbRuns = int(self.nb_runs_var.get()) if self.nb_runs_var.get().strip() else 20
+            if self.algo_var.get() == "4":
+                nbRuns = int(self.nb_run_best_solution_var.get()) if self.nb_run_best_solution_var.get().strip() else 3
+            else:
+                nbRuns = int(self.nb_runs_var.get()) if self.nb_runs_var.get().strip() else 20
             solutionFolderPath = self.solution_folder_var.get().strip()
             
             # Handle placeholder text or empty folder path
@@ -435,6 +555,8 @@ Output:
         self.epsilon_var.set("0.1")
         self.time_limit_var.set("3600")
         self.nb_runs_var.set("20")
+        self.nb_run_best_solution_var.set("3")
+        self.select_algorithm("1", self.algo1_btn, self.algo2_btn, self.algo3_btn, self.algo4_btn, self.algo5_btn, self.algo6_btn, self.algo7_btn)
     
     def exit_app(self):
         self.root.quit()
